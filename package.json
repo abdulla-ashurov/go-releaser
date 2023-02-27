@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abdull-ashurov/go-releaser.git"
+    "url": "git+https://github.com/abdulla-ashurov/go-releaser.git"
   },
   "devDependencies": {
     "@semantic-release/commit-analyzer": "^9.0.2",
