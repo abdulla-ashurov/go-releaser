@@ -1,52 +1,26 @@
 name: Release
-
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main
       - master
-    paths:
-      - '**/*.tpl'
-      - '**/*.py'
-      - '**/*.tf'
-      - '.github/workflows/release.yml'
-
+      - main
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          persist-credentials: false
           fetch-depth: 0
-    
-    # Node.js setup is needed to run Semantic Release
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-
-      # Setup for pushing to Buf.build later
-      - uses: bufbuild/buf-setup-action@v1.14.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    # Required for short-lived token provided to Semantic Release
-      - name: "Obtain Github App token"
-        id: app-token
-        uses: getsentry/action-github-app-token@v2.0.0
-        with:
-          app_id: ${{ secrets.BOT_APP_ID }}
-          private_key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
-
-      - name: "Install Semantic Release dependencies"
+          node-version: "lts/*"
+      - name: Install dependencies
         run: npm ci
-
-      - name: "Execute Semantic Release"
-        run: npx semantic-release
+      - name: Release
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
