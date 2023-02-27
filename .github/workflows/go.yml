@@ -1,5 +1,6 @@
 name: Release
-"on":
+
+on:
   push:
     branches:
       - main
@@ -16,4 +17,5 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npx semantic-release
-        env:
+        env: 
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
