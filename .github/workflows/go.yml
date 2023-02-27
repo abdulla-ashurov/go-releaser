@@ -4,6 +4,10 @@ name: Release
     branches:
       - main
 
+permissions:
+    contents: write
+    packages: write
+
 jobs:
   release:
     name: release
@@ -17,4 +21,5 @@ jobs:
       - run: npm ci
       - run: npx semantic-release
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
